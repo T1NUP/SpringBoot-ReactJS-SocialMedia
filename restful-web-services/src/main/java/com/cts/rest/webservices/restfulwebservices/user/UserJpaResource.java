@@ -64,5 +64,11 @@ public class UserJpaResource {
 	public List<Profile> getAll(){
 		return profileRepository.findAll();
 	}
+	
+	//Show only following
+	@GetMapping("/jpa/users/all/following")
+	public List<Profile> getFolling(){
+		return profileRepository.findAll();
+	}
 
 }

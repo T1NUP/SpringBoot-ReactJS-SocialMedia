@@ -1,26 +1,18 @@
 package com.cts.rest.webservices.restfulwebservices.controller;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
 
 import com.cts.rest.webservices.restfulwebservices.model.ChatMessage;
 import com.cts.rest.webservices.restfulwebservices.model.OutputMessage;
-
-import java.lang.reflect.Array;
-import java.security.Principal;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 
 @Controller
 public class ChatController {
