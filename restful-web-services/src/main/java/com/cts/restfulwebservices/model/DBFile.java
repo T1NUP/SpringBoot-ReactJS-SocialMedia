@@ -2,6 +2,8 @@ package com.cts.restfulwebservices.model;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import com.cts.restfulwebservices.repository.DAOUser;
+
 import javax.persistence.*;
 
 @Entity

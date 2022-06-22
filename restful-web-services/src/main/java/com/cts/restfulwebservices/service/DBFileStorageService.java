@@ -2,11 +2,11 @@ package com.cts.restfulwebservices.service;
 
 import com.cts.restfulwebservices.Exception.FileStorageException;
 import com.cts.restfulwebservices.Exception.MyFileNotFoundException;
-import com.cts.restfulwebservices.dao.DBFileRepository;
-import com.cts.restfulwebservices.dao.UserDao;
 import com.cts.restfulwebservices.model.DBFile;
 import com.cts.restfulwebservices.model.Profile;
 import com.cts.restfulwebservices.model.ProfileRepository;
+import com.cts.restfulwebservices.repository.DBFileRepository;
+import com.cts.restfulwebservices.repository.UserDao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

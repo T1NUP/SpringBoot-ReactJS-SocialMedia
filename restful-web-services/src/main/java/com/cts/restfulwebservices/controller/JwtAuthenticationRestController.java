@@ -7,6 +7,7 @@ import com.cts.restfulwebservices.jwt.JwtUserDetails;
 import com.cts.restfulwebservices.jwt.resource.JwtTokenRequest;
 import com.cts.restfulwebservices.jwt.resource.JwtTokenResponse;
 import com.cts.restfulwebservices.model.*;
+import com.cts.restfulwebservices.repository.DAOUser;
 import com.cts.restfulwebservices.service.JwtUserDetailsService;
 
 import org.springframework.beans.factory.annotation.Autowired;

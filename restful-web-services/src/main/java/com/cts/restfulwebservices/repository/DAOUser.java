@@ -1,5 +1,6 @@
-package com.cts.restfulwebservices.model;
+package com.cts.restfulwebservices.repository;
 
+import com.cts.restfulwebservices.model.Profile;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;

@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.cts.restfulwebservices.model.DAOUser;
-import com.cts.restfulwebservices.model.UserRepository;
 import com.cts.restfulwebservices.post.Post;
 import com.cts.restfulwebservices.post.PostComment;
 import com.cts.restfulwebservices.post.PostJpaRepository;
+import com.cts.restfulwebservices.repository.DAOUser;
+import com.cts.restfulwebservices.repository.UserRepository;
 
 @CrossOrigin(origins="http://localhost:4200")
 @RestController

@@ -2,6 +2,8 @@ package com.cts.restfulwebservices.model;
 
 import javax.persistence.*;
 
+import com.cts.restfulwebservices.repository.DAOUser;
+
 
 @Entity
 @Table(name = "profile")

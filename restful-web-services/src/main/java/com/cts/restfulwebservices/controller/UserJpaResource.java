@@ -20,10 +20,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.cts.restfulwebservices.model.DAOUser;
 import com.cts.restfulwebservices.model.Profile;
 import com.cts.restfulwebservices.model.ProfileRepository;
-import com.cts.restfulwebservices.model.UserRepository;
+import com.cts.restfulwebservices.repository.DAOUser;
+import com.cts.restfulwebservices.repository.UserRepository;
 
 
 @CrossOrigin(origins="http://localhost:4200")

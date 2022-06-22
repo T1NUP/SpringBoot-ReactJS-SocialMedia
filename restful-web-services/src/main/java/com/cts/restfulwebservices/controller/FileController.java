@@ -1,9 +1,9 @@
 package com.cts.restfulwebservices.controller;
 
-import com.cts.restfulwebservices.dao.DBFileRepository;
 import com.cts.restfulwebservices.model.DBFile;
 import com.cts.restfulwebservices.model.Profile;
 import com.cts.restfulwebservices.payload.UploadFileResponse;
+import com.cts.restfulwebservices.repository.DBFileRepository;
 import com.cts.restfulwebservices.service.DBFileStorageService;
 import com.cts.restfulwebservices.service.JwtUserDetailsService;
 

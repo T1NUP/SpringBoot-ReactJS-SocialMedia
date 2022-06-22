@@ -3,9 +3,12 @@ package com.cts.restfulwebservices.service;
 import com.cts.restfulwebservices.Exception.DuplicateValueException;
 import com.cts.restfulwebservices.Exception.InvalidInputException;
 import com.cts.restfulwebservices.Exception.UserExistedException;
-import com.cts.restfulwebservices.dao.DBFileRepository;
-import com.cts.restfulwebservices.dao.UserDao;
 import com.cts.restfulwebservices.model.*;
+import com.cts.restfulwebservices.repository.DAOUser;
+import com.cts.restfulwebservices.repository.DBFileRepository;
+import com.cts.restfulwebservices.repository.FollowRepository;
+import com.cts.restfulwebservices.repository.UserDao;
+import com.cts.restfulwebservices.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

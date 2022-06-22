@@ -1,4 +1,4 @@
-package com.cts.restfulwebservices.model;
+package com.cts.restfulwebservices.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
