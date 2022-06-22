@@ -11,9 +11,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.cts.rest.webservices.restfulwebservices.model.ProfileDTO;
-import com.cts.rest.webservices.restfulwebservices.model.ProfileRepository;
-import com.cts.rest.webservices.restfulwebservices.service.JwtUserDetailsService;
+import com.cts.restfulwebservices.model.ProfileDTO;
+import com.cts.restfulwebservices.model.ProfileRepository;
+import com.cts.restfulwebservices.service.JwtUserDetailsService;
 
 @RunWith(SpringRunner.class)
 @ActiveProfiles("test")

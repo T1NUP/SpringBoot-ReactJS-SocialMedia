@@ -16,10 +16,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.cts.rest.webservices.restfulwebservices.model.ProfileDTO;
-import com.cts.rest.webservices.restfulwebservices.post.Post;
-import com.cts.rest.webservices.restfulwebservices.post.PostComment;
-import com.cts.rest.webservices.restfulwebservices.post.PostJpaRepository;
+import com.cts.restfulwebservices.model.ProfileDTO;
+import com.cts.restfulwebservices.post.Post;
+import com.cts.restfulwebservices.post.PostComment;
+import com.cts.restfulwebservices.post.PostJpaRepository;
 
 import io.restassured.RestAssured;
 
