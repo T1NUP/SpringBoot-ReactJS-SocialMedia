@@ -36,7 +36,6 @@ class ListPostsComponent extends Component {
     }
 
     refreshFeed() {
-
         PostDataService.retrieveAllPosts(this.props.username)
             .then(
                 response => {

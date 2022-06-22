@@ -8,12 +8,16 @@ class SideContentComponent extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
+            username: "",
             firstname: this.props.firstname,
             lastname: this.props.lastname,
             studentnumber: this.props.studentnumber,
             email: this.props.email,
             phonenumber: this.props.phonenumber,
-            aboutme: this.props.aboutme
+            aboutme: this.props.aboutme,
+            following:[],
+            me: "",
+            followButtonEnabled: true
         }
     }
 
@@ -22,24 +26,61 @@ class SideContentComponent extends React.Component{
         this.refreshInfo();
         console.log(this.state);
     }
+    
 
     refreshInfo() {
         AccountProfileService.retrieveDetails(this.props.username)
             .then(response => {
                 this.setState({
+                    username: response.data.username,
                     firstname: response.data.firstname,
                     lastname: response.data.lastname,
                     studentnumber: response.data.studentnumber,
                     email:response.data.email,
                     phonenumber: response.data.phonenumber,
-                    aboutme: response.data.aboutme
+                    aboutme: response.data.aboutme,
+                    followButtonEnabled: true
                 });
-            })
+                this.getFollowers();
+            });
+
     }
+
+    getFollowers=()=>{
+        let user= AuthenticationService.getLoggedInUserName();
+        AccountProfileService.getFollowingUsers(user)
+        .then((response)=>{
+            if(response.data.includes(this.state.username))
+            {
+                this.setState({followButtonEnabled: false})
+            }
+        })
+    }
+
+    followUser =()=>{
+        let user= AuthenticationService.getLoggedInUserName();
+        AccountProfileService.addFollowers(user,this.state.username)
+        .then(() => {
+            // alert("Followed ",this.state.username);
+        });
+        this.refreshInfo();
+    }
+
+    unFollowUser =()=>{
+        let user= AuthenticationService.getLoggedInUserName();
+        AccountProfileService.removeFollower(user,this.state.username)
+        .then((response)=>{
+            if(response.data==="SUCCESS")
+            {
+                this.setState({followButtonEnabled: true})
+            }
+        });
+        // this.refreshInfo();
+    }
+
 
     render(){
         return(
-           
             <div className="col-lg-4 row-md">
                 <div className="ui-block">
                     <div className="ui-title" style={{ display: "flex", minHeight: 61 + "px" }}>
@@ -58,6 +99,12 @@ class SideContentComponent extends React.Component{
                             <li><span className="title">Email</span>
                             <span className="text">{this.state.email}</span></li>
                         </div>
+                        <br/><br/><br/>
+                        {(AuthenticationService.getLoggedInUserName() != this.props.username)?
+                        ((this.state.followButtonEnabled)?
+                            <button type="button" class="btn btn-secondary" onClick={()=>this.followUser()}>Follow</button>:
+                            <button type="button" class="btn btn-secondary" onClick={()=>this.unFollowUser()}>Unfollow</button>):""
+                        }
                     </div>
                 </div>
             </div>

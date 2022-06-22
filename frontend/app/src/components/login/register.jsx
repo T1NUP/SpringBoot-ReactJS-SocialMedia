@@ -260,7 +260,7 @@ export class Register extends React.Component {
 
                   <div className={"footerBtn"}>
                     <button type="submit" className="btn text-center btn-info center" name={"register"}>
-                    Register
+                    Registe
                     </button>
                   </div>
 

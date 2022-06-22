@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import './chatbox.scss';
 import ChatModule from './ChatModule';
 import Socket from '../post/StartSocket';
-import Avatar from "../post/Avatar"
+import Avatar from "../post/Avatar";
+import AccountProfileService from "../../api/main/AccountProfileService";
 
 export const USER_NAME_SESSION_ATTRIBUTE_NAME = 'authenticatedUser'
 var stompClient = null;
@@ -16,7 +17,8 @@ export default class ChatBoxSide extends Component {
             channelConnected: false,
             broadcastMessage: [],
             userList: [],
-            receiver: [] // Users who i'm chatting with
+            receiver: [], // Users who i'm chatting with
+            following: []
         }
         this.connect();
     }
@@ -27,7 +29,22 @@ export default class ChatBoxSide extends Component {
     }
 
     getUserList = () => {
+        
       return this.state.userList;
+    }
+
+    getFollowing=()=>{
+        console.log("USERNmae::",this.state.username);
+        AccountProfileService.getFollowingUsers(this.state.username)
+        .then(response => {
+
+          if (response) {
+            console.log("FETCHED:::",response);
+            this.setState({following: [this.state.username,...response.data]});
+          }
+
+        })
+        // this.setState({following: ["FirstLast2","FirstLast3"]});
     }
 
     onConnected = () => {
@@ -53,7 +70,6 @@ export default class ChatBoxSide extends Component {
         {},
         JSON.stringify({ sender: this.state.username, type: 'JOIN' })
         )
-
         stompClient.send("/app/getUserlist", {}, this.state.username);
 
 
@@ -65,9 +81,11 @@ export default class ChatBoxSide extends Component {
 
     onRefreshUserList = (payload) => {
         let users = JSON.parse(payload.body);
+        console.log("WS Payload:::", payload);
         this.setState(prevState => ({
             userList: users
         }), );
+        this.getFollowing();
     }
 
     sendMessage = (type, value, receiver) => {
@@ -119,7 +137,8 @@ export default class ChatBoxSide extends Component {
 
 
     handleSelectUser = (user) => {
-        if(!user.includes(this.state.username) && !this.state.receiver.includes(user)) {
+        // if(!user.includes(this.state.username) && !this.state.receiver.includes(user)) {
+        if(user!=(this.state.username) && (!this.state.receiver.includes(user))) {
             this.setState(prevState => ({
                 receiver: [...prevState.receiver, user]
             }))
@@ -134,17 +153,27 @@ export default class ChatBoxSide extends Component {
     render() {
         const components = [];
         for(var i = 0; i < this.state.receiver.length; i++) {
-            components.push(<ChatModule receiver={this.state.receiver[i]} broadcastMessage={this.state.broadcastMessage}
+            console.log("Data:::",this.state.receiver[i])
+            components.push(
+            <ChatModule receiver={this.state.receiver[i]} broadcastMessage={this.state.broadcastMessage}
                 handleCloseUser={this.handleCloseUser}
-                sendMessage={this.sendMessage} username={this.state.username} key={i}/>);
+                sendMessage={this.sendMessage} username={this.state.username} key={i}/>
+            );
         }
         return(
             <div>
                 <div className="cbox-slide">
-                    {Array.from(this.state.userList).map((user, indexes) => <div key={indexes} className="card user-holder" onClick={() => this.handleSelectUser(user)}>
-                        <Avatar username={user} style={{float: 'left'}}/>
-                        <div style={{float: 'left'}} className="chat-username">{this.state.username === user ? user + " (You)" : user}</div>
-                    </div>)}
+                    {
+                    Array.from(this.state.userList).map((user, indexes) => { 
+                        if(this.state.following.includes(user)){
+                        return(<div key={indexes} className="card user-holder" onClick={() => this.handleSelectUser(user)}>
+                            <Avatar username={user} style={{float: 'left'}}/>
+                            <div style={{float: 'left'}} className="chat-username">{this.state.username === user ? user + " (You)" : user}</div>
+                        </div>);
+                        }
+                    }
+                    )
+                    }
                 </div>
                 <div className="chatArea">
                     {components}

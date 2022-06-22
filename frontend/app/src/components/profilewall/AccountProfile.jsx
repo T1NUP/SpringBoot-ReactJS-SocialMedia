@@ -27,6 +27,7 @@ class AccountProfile extends React.Component {
 
   componentDidMount() {
       this.refreshInfo();
+      console.log("SEE FROM CONTENT CO::",this.props);
   }
 
   refreshInfo() {

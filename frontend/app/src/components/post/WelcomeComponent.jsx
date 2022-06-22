@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PostDataService from '../../api/main/PostDataService'
-import AuthenticationService from './AuthenticationService'
+import AuthenticationService from './AuthenticationService';
+import AccountProfileService from '../../api/main/AccountProfileService';
 import { ReactComponent as Empty } from './assets/empty.svg';
 import PostCard from './PostCard'
 import PostComponent from './PostComponent';
@@ -15,12 +16,14 @@ class WelcomeComponent extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            posts: []
+            posts: [],
+            followingAndMe: []
         }
         this.refers = [];
     }
 
     componentDidMount() {
+        this.getFollowers();
         this.retrieveAllTodos();
         stompClient = Socket.connect();
         stompClient.connect({}, this.onConnected, this.onError);
@@ -33,6 +36,17 @@ class WelcomeComponent extends Component {
 
     onError = (err) => {
         console.error(err);
+    }
+
+    getFollowers=()=>{
+        let user= AuthenticationService.getLoggedInUserName();
+        AccountProfileService.getFollowingUsers(user)
+        .then((response)=>{
+            if(response.data)
+            {
+                this.setState({followingAndMe: [...response.data,user]});
+            }
+        });
     }
 
     retrieveAllTodos = (payload) => {
@@ -67,9 +81,11 @@ class WelcomeComponent extends Component {
                 <PostComponent refreshFeed={this.retrieveAllTodos} username={AuthenticationService.getLoggedInUserName()} stompClient={stompClient}/>
                 {this.state.posts.length > 0 ? <>
                 {this.state.posts.map(
-                    (post,i) =>
+                    (post,i) =>{
+                        if(this.state.followingAndMe.includes(post.username))
+                        return(
                         <PostCard key={post.id} post={post} ref={ref => this.refers[post.id] = ref} refreshFeed={this.retrieveAllTodos} deletePostClicked={this.deletePostClicked} username={post.username} stompClient={stompClient}/>
-                )}
+                    )})}
                 </> : <Empty width={50 + "vw"} style={{maxWidth: 500}}/>}
             </div>
         )

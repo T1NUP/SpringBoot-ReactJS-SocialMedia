@@ -12,7 +12,6 @@ import AccountProfileService from "../../api/main/AccountProfileService";
 class MainApp extends Component {
     constructor(props) {
         super(props)
-
         this.state = {
             value: '',
             renderValue: ''

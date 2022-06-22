@@ -44,6 +44,7 @@ class AuthenticationService {
     }
 
 
+    //DO SESSION MEMORY CLEANUP HERE...before logout
     logout() {
         sessionStorage.removeItem(USER_NAME_SESSION_ATTRIBUTE_NAME);
     }

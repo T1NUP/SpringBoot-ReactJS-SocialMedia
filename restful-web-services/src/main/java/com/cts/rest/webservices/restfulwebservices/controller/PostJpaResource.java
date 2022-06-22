@@ -1,4 +1,4 @@
-package com.cts.rest.webservices.restfulwebservices.post;
+package com.cts.rest.webservices.restfulwebservices.controller;
 
 import java.net.URI;
 import java.util.List;
@@ -18,6 +18,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.cts.rest.webservices.restfulwebservices.model.DAOUser;
 import com.cts.rest.webservices.restfulwebservices.model.UserRepository;
+import com.cts.rest.webservices.restfulwebservices.post.Post;
+import com.cts.rest.webservices.restfulwebservices.post.PostComment;
+import com.cts.rest.webservices.restfulwebservices.post.PostJpaRepository;
 
 @CrossOrigin(origins="http://localhost:4200")
 @RestController

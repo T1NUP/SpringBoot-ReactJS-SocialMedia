@@ -1,7 +1,11 @@
-package com.cts.rest.webservices.restfulwebservices.jwt.resource;
+package com.cts.rest.webservices.restfulwebservices.controller;
 
+import com.cts.rest.webservices.restfulwebservices.config.JwtAuthenticationEntryPoint;
 import com.cts.rest.webservices.restfulwebservices.jwt.JwtTokenUtil;
 import com.cts.rest.webservices.restfulwebservices.jwt.JwtUserDetails;
+import com.cts.rest.webservices.restfulwebservices.jwt.resource.AuthenticationException;
+import com.cts.rest.webservices.restfulwebservices.jwt.resource.JwtTokenRequest;
+import com.cts.rest.webservices.restfulwebservices.jwt.resource.JwtTokenResponse;
 import com.cts.rest.webservices.restfulwebservices.model.*;
 import com.cts.rest.webservices.restfulwebservices.service.JwtUserDetailsService;
 
@@ -17,6 +21,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+
+import java.util.List;
 import java.util.Objects;
 
 @RestController
@@ -58,7 +64,49 @@ public class JwtAuthenticationRestController {
 			return ResponseEntity.badRequest().body("Duplicated User");
 		}
 	}
-
+	
+	/**
+	*FollowRequset API 
+	*@author Punit
+	*user following a username
+	*/
+	@PutMapping("/jpa/user/{user}/followuser/{username}")
+	public ResponseEntity<?> followUserWithUsername(@PathVariable String user, @PathVariable String username) {
+		Follow follow= jwtInMemoryUserDetailsService.followUser(user, username);
+		if(follow!=null) {
+			return ResponseEntity.ok(follow);
+		}
+		else {
+			return ResponseEntity.badRequest().body("Error Occoured");
+		}
+	}
+	
+	/**
+	*Followers API 
+	*@author Punit
+	*user searching users he is following
+	*/
+	@GetMapping("/jpa/{user}/following")
+	public ResponseEntity<?> getAllFollowing(@PathVariable String user) {
+		List<String> following= jwtInMemoryUserDetailsService.getAllFollowing(user);
+		if(following!=null) {
+			return ResponseEntity.ok(following);
+		}
+		else {
+			return ResponseEntity.ok("");
+		}
+	}
+	
+	/**
+	*UnFollow API 
+	*@author Punit
+	*user unfollowing username
+	*/
+	@PutMapping("/jpa/user/{user}/unfollowuser/{username}")
+	public ResponseEntity<?> unfollowRequest(@PathVariable String user, @PathVariable String username) {
+		jwtInMemoryUserDetailsService.removeFollower(user, username);
+		return ResponseEntity.ok("SUCCESS");
+	}
 
 
 	@GetMapping("/jpa/checkuser/username/{username}")

@@ -43,6 +43,9 @@ public class JwtUserDetailsService implements UserDetailsService {
 	@Autowired
 	private DBFileRepository dbFileRepository;
 
+	@Autowired
+	private FollowRepository followRepository;
+
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException, InvalidInputException {
 
@@ -98,41 +101,39 @@ public class JwtUserDetailsService implements UserDetailsService {
 		return profileRepository.save(profile);
 	}
 
-	public Profile update(ProfileDTO profile) throws InvalidInputException,DuplicateValueException{
-		
+	public Profile update(ProfileDTO profile) throws InvalidInputException, DuplicateValueException {
+
 		boolean validUsername = Pattern.matches(usernameRegex, profile.getUsername());
 		boolean validFirstname = Pattern.matches(nameRegex, profile.getFirstname());
 		boolean validLastname = Pattern.matches(nameRegex, profile.getLastname());
 		boolean validStudentnumber = Pattern.matches(studentnumberRegex, profile.getStudentnumber());
 		boolean validPhonenumber = Pattern.matches(phonenumberRegex, profile.getPhonenumber());
 		boolean validEmail = Pattern.matches(emailRegex, profile.getEmail());
-	
-		
+
 		if (validUsername == false) {
 			throw new InvalidInputException("Username: " + profile.getUsername() + " is invalid");
 		}
-		
+
 		if (validFirstname == false) {
 			throw new InvalidInputException("First name: " + profile.getFirstname() + " is invalid");
 		}
-		
+
 		if (validLastname == false) {
 			throw new InvalidInputException("Last name: " + profile.getLastname() + " is invalid");
 		}
-		
+
 		if (validStudentnumber == false) {
 			throw new InvalidInputException("Student number: " + profile.getStudentnumber() + " is invalid");
 		}
-		
+
 		if (validPhonenumber == false) {
 			throw new InvalidInputException("Phone number: " + profile.getPhonenumber() + " is invalid");
 		}
-		
+
 		if (validEmail == false) {
 			throw new InvalidInputException("Email: " + profile.getEmail() + " is invalid");
 		}
-		
-		
+
 		Profile exists = profileRepository.findByUsername(profile.getUsername());
 		Profile newProfile = new Profile();
 
@@ -157,7 +158,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 
 	}
 
-	public boolean checkUsername(String username)  {
+	public boolean checkUsername(String username) {
 		boolean exist = false;
 		List<DAOUser> found = userRepository.findByUsername(username);
 		if (found.isEmpty()) {
@@ -200,6 +201,36 @@ public class JwtUserDetailsService implements UserDetailsService {
 			exist = true;
 		}
 		return exist;
+	}
+
+	// add new follower
+	public Follow followUser(String user, String toFollow) {
+		Follow follow = new Follow();
+		follow.setUsername(user);
+		follow.setFollowing(toFollow);
+
+		List<String> follows = followRepository.findAllFollowers(user);
+		// to avoid redundant storage
+		if (!follows.contains(toFollow)) {
+			follow = followRepository.save(follow);
+			return follow;
+		} else {
+			return follow;
+		}
+	}
+
+	// getting all users following
+	public List<String> getAllFollowing(String user) {
+
+		List<String> follows = followRepository.findAllFollowers(user);
+		return follows;
+	}
+	
+	//deleting follow record from Follow table
+	public boolean removeFollower(String user,String username) {
+		followRepository.deleteFollowRecord(user, username);
+//		System.out.println(result);
+		return true;
 	}
 
 	/*

@@ -1,4 +1,4 @@
-package com.cts.rest.webservices.restfulwebservices.user;
+package com.cts.rest.webservices.restfulwebservices.controller;
 
 import java.net.URI;
 import java.util.Arrays;

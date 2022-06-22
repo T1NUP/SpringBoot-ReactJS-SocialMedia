@@ -100,6 +100,18 @@ class AccountProfileService {
         return axios.get(`${JPA_API_URL}/users/`);
     }
 
+    getFollowingUsers(username){
+        return axios.get(`${JPA_API_URL}/${username}/following`);
+    }
+
+    addFollowers(user,toFollow){
+        return axios.put(`${JPA_API_URL}/user/${user}/followuser/${toFollow}`);
+    }
+
+    removeFollower(user, toUnFollow){
+        return axios.put(`${JPA_API_URL}/user/${user}/unfollowuser/${toUnFollow}`);
+    }
+
 }
 
 export default new AccountProfileService()
