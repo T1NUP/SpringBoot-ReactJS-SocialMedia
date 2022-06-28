@@ -75,7 +75,7 @@ class AccountProfileService {
             },
         });
     }
-
+    
     
     uploadBackground(file, username) {
         const formData = new FormData();

@@ -3,9 +3,13 @@ package com.cts.restfulwebservices.controller;
 import com.cts.restfulwebservices.model.DBFile;
 import com.cts.restfulwebservices.model.Profile;
 import com.cts.restfulwebservices.payload.UploadFileResponse;
+import com.cts.restfulwebservices.post.Post;
+import com.cts.restfulwebservices.post.PostJpaRepository;
 import com.cts.restfulwebservices.repository.DBFileRepository;
 import com.cts.restfulwebservices.service.DBFileStorageService;
 import com.cts.restfulwebservices.service.JwtUserDetailsService;
+
+import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +37,9 @@ public class FileController {
 
     @Autowired
     JwtUserDetailsService jwtInMemoryUserDetailsService;
+    
+    @Autowired
+	private PostJpaRepository postJpaRepository;
 
     
     @PostMapping("/jpa/uploadAvatar/{username}")
@@ -65,6 +72,70 @@ public class FileController {
 
         return new UploadFileResponse(dbFile.getFileName(), fileDownloadUri,
                 file.getContentType(), file.getSize());
+    }
+    
+    /**
+	*Upload post API 
+	*@author Punit
+	*@Note does Post entity upload with null description to be able to map url
+	*/
+    
+    @PostMapping("/jpa/uploadPost/{username}")
+    public UploadFileResponse uploadPost( @PathVariable String username, @RequestBody MultipartFile file) {
+    	
+        DBFile dbFile = DBFileStorageService.storeFile(file);
+        
+        Date timeStamp= new Date();
+        
+        Post picPost= new Post();
+        picPost.setUsername(username);
+        picPost.setTargetDate(timeStamp);
+
+        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/picpost/")
+                .path(timeStamp.toString().replaceAll(" ", ""))
+                .toUriString();
+        System.out.println("This user: " + username);
+        System.out.println("File Pic URL: " + fileDownloadUri);
+
+//        DBFile toDelete =  dbFileRepository.findByFileURL(fileDownloadUri);
+//
+//        if(toDelete != null){
+//            dbFileRepository.deleteById(toDelete.getId());
+//        }
+
+        dbFile.setFileURL(fileDownloadUri);
+
+        dbFileRepository.save(dbFile);
+        System.out.println(dbFile);
+
+
+//        Profile updated = jwtInMemoryUserDetailsService.assignAvatar(username, dbFile);
+        picPost.setPostImage(dbFile.getFileURL());
+        postJpaRepository.save(picPost);
+
+
+        return new UploadFileResponse(dbFile.getFileName(), fileDownloadUri,
+                file.getContentType(), file.getSize());
+    }
+    
+    /**
+	*For sending src of image to ui
+	*@author Punit
+	*/
+    
+    @GetMapping("/picpost/{endpoint}")
+    public ResponseEntity<Resource> downloadPostFile(@PathVariable String endpoint) {
+        // Load file from database
+//        DBFile dbFile = DBFileStorageService.getAvatarByProfile(username);
+        
+//        DBFile test = dbFileRepository.findByFileURL("http://localhost:8080/post/MonJun2722:21:41IST2022");
+    	DBFile file= DBFileStorageService.getPostImage(endpoint);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(file.getFileType()))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFileName() + "\"")
+                .body(new ByteArrayResource(file.getData()));
     }
     
     @PostMapping("/jpa/uploadBackground/{username}")

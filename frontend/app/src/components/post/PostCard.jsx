@@ -8,6 +8,7 @@ import moment from 'moment';
 import Avatar from './Avatar';
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
+import LikeButton from "../profilewall/assets/likebutton.ico";
 let stompClient = null;
 export default class PostCard extends Component {
     constructor(props) {
@@ -16,7 +17,8 @@ export default class PostCard extends Component {
             target: this.props.username,
             show: false,
             comments: [],
-            content: ''
+            content: '',
+            like: 0
         }
     }
 
@@ -31,7 +33,7 @@ export default class PostCard extends Component {
     }
 
     componentDidMount() {
-        this.setState({comments: this.props.post.comments}, this.scrollToBottom());
+        this.setState({comments: this.props.post.comments, like: this.props.post.likes.length}, this.scrollToBottom());
         this.refreshComments();
     }
 
@@ -67,6 +69,31 @@ export default class PostCard extends Component {
         this.setState({content: ''});
     }
 
+    handleLike =()=>{
+        let username = AuthenticationService.getLoggedInUserName();
+        let body={
+            idOfPost: this.props.post.id,
+            liker: username
+        }
+        PostDataService.likePost(body)
+            .then((response)=>{
+                (response.data==="Like Added") ? this.setState({like: parseInt(this.state.like) + 1})
+                : this.handleUnLike();
+        });
+    }
+
+    handleUnLike=()=>{
+        let username = AuthenticationService.getLoggedInUserName();
+        let body={
+            idOfPost: this.props.post.id,
+            liker: username
+        }
+        PostDataService.unLikePost(body)
+            .then((response)=>
+                this.setState({like: parseInt(this.state.like) - 1})
+        );
+    }
+
     scrollToBottom = () => {
         var object = this.refs.comments;
         if (object)
@@ -85,14 +112,18 @@ export default class PostCard extends Component {
                     </div>
                 </div>
                 {this.props.username == AuthenticationService.getLoggedInUserName() ? <div className="status-right">
-                    <OverlayTrigger placement={"bottom"} overlay={<Tooltip id={"tooltip-bottom"}>Edit this post</Tooltip>}><Edit onClick={this.toggleShow}/></OverlayTrigger>
+                    {((!this.props.post.postImage) && <OverlayTrigger placement={"bottom"} overlay={<Tooltip id={"tooltip-bottom"}>Edit this post</Tooltip>}><Edit onClick={this.toggleShow}/></OverlayTrigger>)}
                     <OverlayTrigger placement={"bottom"} overlay={<Tooltip id={"tooltip-bottom"}>Delete this post</Tooltip>}><Close name="delete" onClick={() => this.props.deletePostClicked(this.props.post.id)}/></OverlayTrigger>
                 </div> : ""}
             </div>
             <div className="status-content">
-                {!this.state.show && this.props.post.description}
+                {!this.state.show && 
+                    (this.props.post.description != null) ? this.props.post.description 
+                        : <img className="image-post" src={this.props.post.postImage}/>
+                }
                 {this.state.show && <Editable post={this.props.post} toggleShow={this.toggleShow} username={this.props.username} refreshFeed={this.props.refreshFeed} content={this.props.post.description} stompClient={this.props.stompClient}></Editable>}
             </div>
+            <div className="like-block" onClick={()=>this.handleLike()}><img className='like-icon' src={LikeButton}/>{(this.state.like===0) ? "" : this.state.like}</div>
             <div className="comments">
                 <div className="commentHolder" ref="comments">
                     {this.state.comments.map((comment, i) => <div className="comment" key={i}><Avatar username={comment.username}/><div className="commenter"><a href={'/profile/' + comment.username}>{comment.username}</a></div> <div className="comment-desc">{comment.description}</div></div>)}

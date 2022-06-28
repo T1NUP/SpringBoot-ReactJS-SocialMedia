@@ -2,6 +2,7 @@ package com.cts.restfulwebservices.controller;
 
 import com.cts.restfulwebservices.Exception.AuthenticationException;
 import com.cts.restfulwebservices.config.JwtAuthenticationEntryPoint;
+import com.cts.restfulwebservices.feign.Receiver;
 import com.cts.restfulwebservices.jwt.JwtTokenUtil;
 import com.cts.restfulwebservices.jwt.JwtUserDetails;
 import com.cts.restfulwebservices.jwt.resource.JwtTokenRequest;
@@ -10,6 +11,8 @@ import com.cts.restfulwebservices.model.*;
 import com.cts.restfulwebservices.repository.DAOUser;
 import com.cts.restfulwebservices.service.JwtUserDetailsService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -29,6 +32,8 @@ import java.util.Objects;
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
 public class JwtAuthenticationRestController {
+	
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Value("${jwt.http.request.header}")
 	private String tokenHeader;
@@ -41,13 +46,18 @@ public class JwtAuthenticationRestController {
 
 	@Autowired
 	private JwtUserDetailsService jwtInMemoryUserDetailsService;
+	
+	@Autowired
+	private Receiver receiver;
 
 	@RequestMapping(value = "${jwt.get.token.uri}", method = RequestMethod.POST)
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtTokenRequest authenticationRequest)
 			throws AuthenticationException {
 
 		authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
-
+		
+		logger.info("Inside createAuthenticationToken {}", authenticationRequest);
+		
 		final UserDetails userDetails = jwtInMemoryUserDetailsService
 				.loadUserByUsername(authenticationRequest.getUsername());
 
@@ -73,13 +83,14 @@ public class JwtAuthenticationRestController {
 	*/
 	@PutMapping("/jpa/user/{user}/followuser/{username}")
 	public ResponseEntity<?> followUserWithUsername(@PathVariable String user, @PathVariable String username) {
-		Follow follow= jwtInMemoryUserDetailsService.followUser(user, username);
-		if(follow!=null) {
-			return ResponseEntity.ok(follow);
-		}
-		else {
-			return ResponseEntity.badRequest().body("Error Occoured");
-		}
+//		Follow follow= jwtInMemoryUserDetailsService.followUser(user, username);
+//		if(follow!=null) {
+//			return ResponseEntity.ok(follow);
+//		}
+//		else {
+//			return ResponseEntity.badRequest().body("Error Occoured");
+//		}
+		return receiver.addFollow(user, username);
 	}
 	
 	/**
@@ -89,24 +100,27 @@ public class JwtAuthenticationRestController {
 	*/
 	@GetMapping("/jpa/{user}/following")
 	public ResponseEntity<?> getAllFollowing(@PathVariable String user) {
-		List<String> following= jwtInMemoryUserDetailsService.getAllFollowing(user);
-		if(following!=null) {
-			return ResponseEntity.ok(following);
-		}
-		else {
-			return ResponseEntity.ok("");
-		}
+//		List<String> following= jwtInMemoryUserDetailsService.getAllFollowing(user);
+//		if(following!=null) {
+//			return ResponseEntity.ok(following);
+//		}
+//		else {
+//			return ResponseEntity.ok("");
+//		}
+		return receiver.getAllFollow(user);
 	}
 	
 	/**
 	*UnFollow API 
 	*@author Punit
-	*user unfollowing username
+	*@apiNoter unfollowing username
 	*/
 	@PutMapping("/jpa/user/{user}/unfollowuser/{username}")
 	public ResponseEntity<?> unfollowRequest(@PathVariable String user, @PathVariable String username) {
-		jwtInMemoryUserDetailsService.removeFollower(user, username);
-		return ResponseEntity.ok("SUCCESS");
+//		jwtInMemoryUserDetailsService.removeFollower(user, username);
+//		return ResponseEntity.ok("SUCCESS");
+		
+		return receiver.removeFollow(user, username);
 	}
 
 

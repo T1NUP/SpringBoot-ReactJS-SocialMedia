@@ -19,6 +19,17 @@ class PostDataService {
         return axios.delete(`${JPA_API_URL}/users/${name}/posts/${id}`);
     }
 
+    uploadPost(file, username) {
+        const formData = new FormData();
+        formData.set("file", file);
+        return axios.post(`${JPA_API_URL}/uploadPost/${username}`,formData,
+        {
+            headers: {
+                'content-type': 'multipart/form-data'
+            },
+        });
+    }
+
     updatePost(name, id, todo) {
         return axios.put(`${JPA_API_URL}/users/${name}/posts/${id}`, todo);
     }
@@ -33,6 +44,14 @@ class PostDataService {
 
     postComment(name, id, comment) {
         return axios.post(`${JPA_API_URL}/users/${name}/posts/${id}/comments`, comment);
+    }
+
+    likePost(body) {
+        return axios.post(`${JPA_API_URL}/like`, body)
+    }
+
+    unLikePost(body) {
+        return axios.post(`${JPA_API_URL}/unlike`, body)
     }
 
 }

@@ -45,6 +45,21 @@ public class DBFileStorageService  {
             throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
         }
     }
+    
+    /**
+	*Utility for retriving image 
+	*@author Punit
+	*image contains differentiator timestamp
+	*/
+    public DBFile getPostImage(String image) {
+//    	String URI= "http://localhost:8080/picpost/"+image;
+    	String URI= ServletUriComponentsBuilder.fromCurrentContextPath()
+    			.path("/picpost/")
+    			.path(image)
+    			.toUriString();
+    	DBFile postFile= dbFileRepository.findByFileURL(URI);
+    	return postFile;
+    }
 
     public DBFile getAvatarByProfile(String name) {
 //    	Profile profile = profileRepository.findByUsername(name);
@@ -55,7 +70,7 @@ public class DBFileStorageService  {
         DBFile test = dbFileRepository.findByFileURL(URI);
 
         try {
-            System.out.println("--------------------------------------" + test.getClass().getName());
+            System.out.println("--------------------------------------" + URI);
     		return test;
     	}
     	catch(Exception e) {

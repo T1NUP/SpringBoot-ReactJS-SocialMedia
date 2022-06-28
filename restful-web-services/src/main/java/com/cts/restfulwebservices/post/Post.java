@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.*;
 
+import com.cts.restfulwebservices.model.LikeDTO;
+
 @Entity
 @Table(name = "Todo")
 public class Post {
@@ -15,10 +17,14 @@ public class Post {
 	private String username;
 	private String description;
 	private Date targetDate;
+	private String image;
 	private boolean isDone;
 
 	@ElementCollection(fetch = FetchType.LAZY)
 	private List<PostComment> comments = new ArrayList<>();
+	
+	@ElementCollection(fetch = FetchType.LAZY)
+	private List<LikeDTO> likes = new ArrayList<>();
 
 	public Post() {
 
@@ -33,11 +39,41 @@ public class Post {
 		this.targetDate = targetDate;
 		this.isDone = isDone;
 		this.comments = new ArrayList<PostComment>();
+		this.likes = new ArrayList<LikeDTO>();
 	}
+	
+	public Post addLikes(LikeDTO like) {
+		this.likes.add(like);
+		return this;
+	}
+	
+	public List<LikeDTO> getLikes(){
+		return this.likes;
+	}
+	
+	public void setNewLikes(List<LikeDTO> list) {
+		this.likes.addAll(list);
+	}
+	
+	public void removeLikeObject(LikeDTO like) {
+		this.likes.remove(like);
+	}
+	
 	public Post addComment(PostComment comment) {
 		this.comments.add(comment);
 		return this;
 	}
+	
+
+	public String getPostImage() {
+		return image;
+	}
+
+
+	public void setPostImage(String image) {
+		this.image = image;
+	}
+
 
 	public List<PostComment> getComments() {
 		return this.comments;

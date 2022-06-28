@@ -88,7 +88,9 @@ class ProfileContainer extends React.Component {
 
   onSaveAvatar = () => {
     let username = AuthenticationService.getLoggedInUserName();
+    console.log("PIC:::", this.state.avatarfile, username)
     AccountProfileService.uploadAvatar(this.state.avatarfile, username).then(() => {
+      console.log("PIC:::", this.state.avatarfile, username)
       this.refreshInfo();
       this.handleClose();
       window.location.reload();
@@ -97,6 +99,7 @@ class ProfileContainer extends React.Component {
 
   onSaveBackGround = () => {
     let username = AuthenticationService.getLoggedInUserName();
+    console.log("PIC:::", this.state.avatarfile, username)
     AccountProfileService.uploadBackground(this.state.backgroundfile, username).then(() => {
       this.refreshInfo();
       this.handleCloseBG();

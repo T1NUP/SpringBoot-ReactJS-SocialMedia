@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.cts.restfulwebservices.model.LikeDTO;
 import com.cts.restfulwebservices.post.Post;
 import com.cts.restfulwebservices.post.PostComment;
 import com.cts.restfulwebservices.post.PostJpaRepository;
@@ -98,4 +99,63 @@ public class PostJpaResource {
 		
 		return ResponseEntity.created(uri).build();
 	}
+	
+	/**
+	*like API 
+	*@author Punit
+	*@param LikeDTO
+	*@return {@link ResponseEntity}
+	*/
+	
+	@PostMapping("/jpa/like")
+	public ResponseEntity<String> addLike(@RequestBody LikeDTO like){
+		
+		Post post= postJpaRepository.findById(like.getIdOfPost()).get();
+		List<LikeDTO> likes= post.getLikes();
+		int flag=0;
+		for(LikeDTO l: likes) {
+			if(l.getLiker().equals(like.getLiker()))
+			{
+				flag=1;
+			}
+		}
+		if(flag==0) {
+			post.addLikes(like);
+			postJpaRepository.save(post);
+			return ResponseEntity.ok("Like Added");
+		}
+		else {
+			return ResponseEntity.ok("Already Present");
+		}
+				
+	}
+	
+	/**
+	*unlike API 
+	*@author Punit
+	*@param LikeDTO
+	*@return {@link ResponseEntity}
+	*/
+	
+	@PostMapping("/jpa/unlike")
+	public ResponseEntity<String> unLike(@RequestBody LikeDTO like){
+		
+		Post post= postJpaRepository.findById(like.getIdOfPost()).get();
+		List<LikeDTO> likes= post.getLikes();
+		LikeDTO ld= null;
+		for(LikeDTO l: likes) {
+			if((l.getLiker().equals(like.getLiker()))&&(l.getIdOfPost()==like.getIdOfPost()))
+			{
+				ld= l;
+				break;
+			}
+		}
+		if(ld!=null) {
+			post.removeLikeObject(ld);
+			postJpaRepository.save(post);
+		}
+		
+		return ResponseEntity.ok("Done!");
+	}
+	
 }

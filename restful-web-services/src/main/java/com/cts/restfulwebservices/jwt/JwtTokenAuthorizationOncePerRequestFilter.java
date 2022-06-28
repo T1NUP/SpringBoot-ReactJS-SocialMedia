@@ -24,7 +24,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 @Component
 public class JwtTokenAuthorizationOncePerRequestFilter extends OncePerRequestFilter {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(JwtTokenAuthorizationOncePerRequestFilter.class);
 
     @Autowired
     private UserDetailsService jwtInMemoryUserDetailsService;
@@ -33,11 +33,11 @@ public class JwtTokenAuthorizationOncePerRequestFilter extends OncePerRequestFil
     private JwtTokenUtil jwtTokenUtil;
     
     @Value("${jwt.http.request.header}")
-    private String tokenHeader;
+    private String tokenHeader;//Authorization
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
-        logger.debug("Authentication Request For '{}'", request.getRequestURL());
+        logger.debug("Authentication Request For {}", request.getRequestURL());
 
         final String requestTokenHeader = request.getHeader(this.tokenHeader);
 

@@ -15,7 +15,7 @@
             float: left;
             font-weight: bold;
             color: black;
-            font-size: 1.5em;
+            font-size: 2em;
             .date {
                 font-weight: light;
                 color: lightgray;
@@ -37,15 +37,47 @@
         }
     }
 
+    .like-block{
+        width: 6%;
+        height: 20%;
+        padding: 0% 0% 1% 1%;
+        font-size: x-large;
+        font-weight: 600;
+        background-color: slategray;
+        border-radius: 55% 5% 0 0;
+    }
+
+    .like-block:hover{
+        border-radius: 55% 55% 0 0;
+        background-color: #c7d5eb ;
+    }
+
+    .like-icon{
+        width: 50%;
+        height: 20%;
+        margin: 0;
+    }
+
+    .image-post{
+        width: 100%;
+        height: 100%;
+    }
+
     .status-content{
         margin-top: .5em;
         color: #1c1e21;
-        font-size: 1.2em;
+        font-size: 1.5em;
+        padding: 1%;
+        font-weight: 600;
+        background-color: #f1ffec91;
     }
 
     .create-tool {
+        width: 30%;
         margin-top: 20px;
         display: flex;
+        justify-content: space-evenly;
+        align-content: space-around;
         float:right;
         position: relative;
 
@@ -137,11 +169,13 @@
         width: 100%;
 
         & .commenter a{
-            color: darkcyan;
+            color: #79fcfc;
             font-weight: bold;
+            font-size: 1.2em;
         }
 
         & .comment-desc {
+            color: #cfcfcf;
         }
     }
 
@@ -175,12 +209,13 @@
 
 .main-content {
     min-height: 100vh;
+    background-color: #7c6c68;
 }
 
 .cmt-avatar {
     background: lightgray;
-    width: 40px;
-    height: 40px;
+    width: 45px;
+    height: 45px;
     border-radius: 100%;
     float: left;
     margin-right: 1em;

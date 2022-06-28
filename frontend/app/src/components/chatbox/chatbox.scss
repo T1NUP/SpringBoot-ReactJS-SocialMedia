@@ -109,7 +109,7 @@
     }
     .cbox-slide {
         flex: 1;
-        background: #ECF3FF;
+        background: #828995;
         position: fixed;
         height: 100%;
         right: 0;
@@ -170,6 +170,7 @@
         overflow: hidden;
         display: block;
         width: 100%;
+        background: #ceaecf;
         line-height: 35px;
 
         &:before {

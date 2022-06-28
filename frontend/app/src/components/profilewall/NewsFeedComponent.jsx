@@ -29,7 +29,7 @@ class NewsFeedComponent extends React.Component{
 
     render(){
         return(
-            <div className="col">
+            <div className="col-lg-8 e">
                 {AuthenticationService.getLoggedInUserName() === this.props.username ?
                     <div className="wrap">
                         <PostComponent match={this.props.match} stompClient={stompClient} refreshFeed={this.refreshFeed} username={this.props.username} history={this.props.history}/>

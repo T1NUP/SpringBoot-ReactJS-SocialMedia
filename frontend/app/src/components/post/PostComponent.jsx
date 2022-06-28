@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
+import Modal from "react-bootstrap/Modal";
+import Button from "react-bootstrap/Button";
 import moment from 'moment'
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import PostDataService from '../../api/main/PostDataService.js'
 import AuthenticationService from './AuthenticationService.js'
+import { API_URL } from '../../Constants'
 import "../profilewall/status.scss"
 
 class PostComponent extends Component {
@@ -12,7 +15,8 @@ class PostComponent extends Component {
         this.state = {
             id: this.props.match ? this.props.match.params.id ? this.props.match.params : -1 : -1,
             description: '',
-            targetDate: moment(new Date()).format()
+            targetDate: moment(new Date()).format(),
+            isOpen: false
         }
 
         this.onSubmit = this.onSubmit.bind(this)
@@ -46,6 +50,9 @@ class PostComponent extends Component {
             errors.targetDate = 'Enter a valid Target Date'
         }
 
+        if(this.state.isOpen)
+            errors.description = 'No files selected!'
+
         return errors
     }
 
@@ -69,11 +76,28 @@ class PostComponent extends Component {
         this.setState({description: ''})
     }
 
+    onSavePost = () => {
+        let username = AuthenticationService.getLoggedInUserName();
+        PostDataService.uploadPost(this.state.postFile, username).then(() => {
+            this.handleModalOpen();
+            this.props.refreshFeed();
+            this.props.stompClient.send("/app/postStatus", {}, true);
+        });
+    }
+
+    handlePostFile = (event) => {
+        this.setState({
+            postFile: event.target.files[0],
+        });
+    }
+
     handleChange = (event) => {
         this.setState({
             description: event.target.value
         });
     }
+
+    handleModalOpen=()=>this.setState({isOpen: !this.state.isOpen})
 
     render() {
 
@@ -102,7 +126,26 @@ class PostComponent extends Component {
                                         <div className="create-content">
                                             <Field className="form-control post-status" type="text" name="description" value={this.state.description} placeholder={"Hey " + this.props.username + ", what are you thinking?"} onChange={this.handleChange}/>
                                         </div>
+                                        <Modal show={this.state.isOpen} onHide={this.handleModalOpen}>
+                                            <Modal.Header closeButton>
+                                                <Modal.Title>Upload Photo</Modal.Title>
+                                            </Modal.Header>
+                                            <Modal.Body>
+                                                <p>Click to upload your Photo, file must be either <strong>png/jpeg</strong></p>
+                                                <fieldset><input id="postfile" name="postfile" type="file" accept="image/png, image/jpeg" onChange={this.handlePostFile} className="form-control" /></fieldset>
+                                            </Modal.Body>
+                                            <Modal.Footer>
+                                                <Button variant="secondary" onClick={this.handleModalOpen}>
+                                                Discard
+                                            </Button>
+                                            <Button variant="primary" onClick={this.onSavePost}>
+                                                Post
+                                            </Button>
+                                            </Modal.Footer>
+                                        </Modal>
                                         <div className="create-tool">
+                                            <button class="btn btn-primary btn-status" onClick={this.handleModalOpen}>Upload Image</button>
+                                                &nbsp;
                                             <button className="btn btn-primary btn-status" type="submit">Post</button>
                                         </div>
 
