@@ -31,14 +31,19 @@ import com.cts.restfulwebservices.repository.UserRepository;
 
 public class UserJpaResource {
     @Autowired
-	private UserRepository UserRepository;
+	private UserRepository userRepository;
 
     @Autowired
     private ProfileRepository profileRepository;
+    
+    @GetMapping("/jpa/users/")
+	public List<DAOUser> getAllUser() {
+		return userRepository.findAll();
+	}
 	
 	@GetMapping("/jpa/users/{username}/profile")
 	public List<DAOUser> getUser(@PathVariable String username){
-		return UserRepository.findByUsername(username);
+		return userRepository.findByUsername(username);
 		//return todoService.findAll();
 	}
 	

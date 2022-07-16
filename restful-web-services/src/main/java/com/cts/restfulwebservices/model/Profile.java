@@ -3,132 +3,139 @@ package com.cts.restfulwebservices.model;
 import javax.persistence.*;
 
 import com.cts.restfulwebservices.repository.DAOUser;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "profile")
 public class Profile {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    @Column
-    private String username;
-    @Column
-    private String firstname;
-    @Column
-    private String lastname;
-    @Column
-    private String email;
-    @Column
-    private String studentnumber;
-    @Column
-    private String phonenumber;
-    @Column
-    private String aboutme;
-    @Column
-    private String avatar;
-    @Column
-    private String background;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
+	@Column
+	private String username;
+	@Column
+	private String firstname;
+	@Column
+	private String lastname;
+	@Column
+	private String email;
+	@Column
+	private String studentnumber;
+	@Column
+	private String phonenumber;
+	@Column
+	private String aboutme;
+	@Column
+	private String avatar;
+	@Column
+	private String background;
 
-   
-    public String getBackground() {
-        return background;
-    }
+	public String getBackground() {
+		return background;
+	}
 
-    public void setBackground(String background) {
-        this.background = background;
-    }
+	public void setBackground(String background) {
+		this.background = background;
+	}
 
-    //oneToOne Relationship with UserID
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(unique = true)
-    private DAOUser user;
+	// oneToOne Relationship with UserID
+	@JsonIgnore
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(unique = true)
+	private DAOUser user;
 
+	/*
+	 * public Profile(String username, String firstname, String lastname, String
+	 * email, String studentnumber, String phonenumber, String aboutme, DAOUser
+	 * user) { this.username = username;
+	 * 
+	 * this.firstname = firstname; this.lastname = lastname; this.email = email;
+	 * this.studentnumber = studentnumber; this.phonenumber = phonenumber;
+	 * this.aboutme = aboutme; this.user = user; }
+	 */
+	public void setID(Long id) {
+		this.id = id;
+	}
 
-   /* public Profile(String username, String firstname, String lastname, String email, String studentnumber, String phonenumber, String aboutme, DAOUser user) {
-    	this.username = username;
+	public long getID() {
+		return id;
+	}
 
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.email = email;
-        this.studentnumber = studentnumber;
-        this.phonenumber = phonenumber;
-        this.aboutme = aboutme;
-        this.user = user;
-    }
-   */
-    public void setID(Long id) {
-    	this.id = id;
-    }
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
-    public long getID() {
-    	return id;
-    }
-    
-    public void setUsername(String username) {
-    	this.username = username;
-    }
-    public String getUsername() {
-    	return username;
-    }
-    
-    public String getFirstname() {
-        return firstname;
-    }
+	public String getUsername() {
+		return username;
+	}
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
+	public String getFirstname() {
+		return firstname;
+	}
 
-    public String getLastname() {
-        return lastname;
-    }
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
+	}
 
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
+	public String getLastname() {
+		return lastname;
+	}
 
-    public String getEmail() {
-        return email;
-    }
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
+	}
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public String getStudentnumber() {
-        return studentnumber;
-    }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-    public void setStudentnumber(String studentnumber) {
-        this.studentnumber = studentnumber;
-    }
-    
-    public String getPhonenumber() {
-    	return phonenumber;
-    }
-    
-    public void setPhonenumber(String phonenumber) {
-    	this.phonenumber = phonenumber;
-    }
-    
-    public String getAboutme() {
-    	return aboutme;
-    }
-    
-    public void setAboutme(String aboutme) {
-    	this.aboutme = aboutme;
-    }
-     public void setAvatar(String avatar){
-        this.avatar = avatar;
-     }
-     public String getAvatar(){
-        return avatar;
-     }
+	public String getStudentnumber() {
+		return studentnumber;
+	}
 
-    @Override
-    public String toString() {
-        return String.format("username: %s, avatar: %s", username, avatar);
-    }
+	public void setStudentnumber(String studentnumber) {
+		this.studentnumber = studentnumber;
+	}
+
+	public String getPhonenumber() {
+		return phonenumber;
+	}
+
+	public void setPhonenumber(String phonenumber) {
+		this.phonenumber = phonenumber;
+	}
+
+	public String getAboutme() {
+		return aboutme;
+	}
+
+	public void setAboutme(String aboutme) {
+		this.aboutme = aboutme;
+	}
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
+	}
+
+	public String getAvatar() {
+		return avatar;
+	}
+
+	public DAOUser getUser() {
+		return user;
+	}
+
+	public void setUser(DAOUser user) {
+		this.user = user;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("username: %s, avatar: %s", username, avatar);
+	}
 }

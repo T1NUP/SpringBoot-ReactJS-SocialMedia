@@ -3,7 +3,7 @@ package com.cts.restfulwebservices.model;
 public class UserDTO {
     private String username;
     private String password;
-    private String email;
+//    private String email;
 
     public String getUsername() {
         return username;

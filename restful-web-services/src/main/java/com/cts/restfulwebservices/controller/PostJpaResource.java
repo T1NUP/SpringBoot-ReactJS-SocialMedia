@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.cts.restfulwebservices.feign.PostReceiver;
 import com.cts.restfulwebservices.model.LikeDTO;
 import com.cts.restfulwebservices.post.Post;
 import com.cts.restfulwebservices.post.PostComment;
@@ -31,46 +32,49 @@ public class PostJpaResource {
 	private PostJpaRepository postJpaRepository;
 
 	@Autowired
-	private UserRepository userRepository;
+	private PostReceiver postReceiver;
 
-	@GetMapping("/jpa/users/")
-	public List<DAOUser> getAllUser() {
-		return userRepository.findAll();
-	}
 	@GetMapping("/jpa/users/posts")
 	public List<Post> getAll() {
-		return postJpaRepository.findAll();
+//		return postJpaRepository.findAll();
+		return postReceiver.getAll();
 	}
 
 	@GetMapping("/jpa/users/{username}/posts")
 	public List<Post> getAllTodos(@PathVariable String username){
-		return postJpaRepository.findByUsername(username);
+//		return postJpaRepository.findByUsername(username);
+		return postReceiver.getAllUserPost(username);
 	}
 
 	@GetMapping("/jpa/users/{username}/posts/{id}")
 	public Post getTodo(@PathVariable String username, @PathVariable long id){
-		return postJpaRepository.findById(id).get();
+//		return postJpaRepository.findById(id).get();
+		return postReceiver.getPost(username, id);
 	}
 
 	@GetMapping("/jpa/users/{username}/posts/{id}/comments")
 	public List<PostComment> getComments(@PathVariable String username, @PathVariable long id){
-		return postJpaRepository.findById(id).get().getComments();
+//		return postJpaRepository.findById(id).get().getComments();
+		return postReceiver.getComments(username, id);
 	}
 
 	@PostMapping("/jpa/users/{username}/posts/{id}/comments")
-	public ResponseEntity<Void> PostMapping(@PathVariable String username, @PathVariable long id, @RequestBody PostComment comment){
+	public ResponseEntity<Void> addComment(@PathVariable String username, @PathVariable long id, @RequestBody PostComment comment){
 
-		Post updatedPost = postJpaRepository.findById(id).get().addComment(comment);
-		updatedPost.setUsername(username);
-
-		postJpaRepository.save(updatedPost); // here lies the problem
-		return ResponseEntity.noContent().build();
+//		Post updatedPost = postJpaRepository.findById(id).get().addComment(comment);
+//		updatedPost.setUsername(username);
+//
+//		postJpaRepository.save(updatedPost); // here lies the problem
+		
+		return postReceiver.addComment(username, id, comment);
+//		return ResponseEntity.noContent().build();
 	}
 
 	@DeleteMapping("/jpa/users/{username}/posts/{id}")
 	public ResponseEntity<Void> deleteTodo(@PathVariable String username, @PathVariable long id) {
-		postJpaRepository.deleteById(id);
-		return ResponseEntity.noContent().build();
+//		postJpaRepository.deleteById(id);
+//		return ResponseEntity.noContent().build();
+		return postReceiver.deletePost(username, id);
 	}
 	
 
@@ -79,25 +83,29 @@ public class PostJpaResource {
 			@PathVariable String username,
 			@PathVariable long id, @RequestBody Post post){
 		
-		post.setUsername(username);
-		post.setComments(postJpaRepository.findById(id).get().getComments());
-		Post postUpdated = postJpaRepository.save(post);
+//		post.setUsername(username);
+//		post.setComments(postJpaRepository.findById(id).get().getComments());
+//		Post postUpdated = postJpaRepository.save(post);
+//		
+//		return new ResponseEntity<Post>(post, HttpStatus.OK);
 		
-		return new ResponseEntity<Post>(post, HttpStatus.OK);
+		return postReceiver.updatePost(username, id, post);
 	}
 	
 	@PostMapping("/jpa/users/{username}/posts")
 	public ResponseEntity<Void> createTodo(
 			@PathVariable String username, @RequestBody Post post){
 		
-		post.setUsername(username);
-
-		Post createdPost = postJpaRepository.save(post);
-
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-				.path("/{id}").buildAndExpand(createdPost.getId()).toUri();
+//		post.setUsername(username);
+//
+//		Post createdPost = postJpaRepository.save(post);
+//
+//		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+//				.path("/{id}").buildAndExpand(createdPost.getId()).toUri();
+//		
+//		return ResponseEntity.created(uri).build();
 		
-		return ResponseEntity.created(uri).build();
+		return postReceiver.createPost(username, post); 
 	}
 	
 	/**
@@ -110,23 +118,25 @@ public class PostJpaResource {
 	@PostMapping("/jpa/like")
 	public ResponseEntity<String> addLike(@RequestBody LikeDTO like){
 		
-		Post post= postJpaRepository.findById(like.getIdOfPost()).get();
-		List<LikeDTO> likes= post.getLikes();
-		int flag=0;
-		for(LikeDTO l: likes) {
-			if(l.getLiker().equals(like.getLiker()))
-			{
-				flag=1;
-			}
-		}
-		if(flag==0) {
-			post.addLikes(like);
-			postJpaRepository.save(post);
-			return ResponseEntity.ok("Like Added");
-		}
-		else {
-			return ResponseEntity.ok("Already Present");
-		}
+//		Post post= postJpaRepository.findById(like.getIdOfPost()).get();
+//		List<LikeDTO> likes= post.getLikes();
+//		int flag=0;
+//		for(LikeDTO l: likes) {
+//			if(l.getLiker().equals(like.getLiker()))
+//			{
+//				flag=1;
+//			}
+//		}
+//		if(flag==0) {
+//			post.addLikes(like);
+//			postJpaRepository.save(post);
+//			return ResponseEntity.ok("Like Added");
+//		}
+//		else {
+//			return ResponseEntity.ok("Already Present");
+//		}
+		
+		return postReceiver.addLike(like);
 				
 	}
 	
@@ -140,22 +150,24 @@ public class PostJpaResource {
 	@PostMapping("/jpa/unlike")
 	public ResponseEntity<String> unLike(@RequestBody LikeDTO like){
 		
-		Post post= postJpaRepository.findById(like.getIdOfPost()).get();
-		List<LikeDTO> likes= post.getLikes();
-		LikeDTO ld= null;
-		for(LikeDTO l: likes) {
-			if((l.getLiker().equals(like.getLiker()))&&(l.getIdOfPost()==like.getIdOfPost()))
-			{
-				ld= l;
-				break;
-			}
-		}
-		if(ld!=null) {
-			post.removeLikeObject(ld);
-			postJpaRepository.save(post);
-		}
+//		Post post= postJpaRepository.findById(like.getIdOfPost()).get();
+//		List<LikeDTO> likes= post.getLikes();
+//		LikeDTO ld= null;
+//		for(LikeDTO l: likes) {
+//			if((l.getLiker().equals(like.getLiker()))&&(l.getIdOfPost()==like.getIdOfPost()))
+//			{
+//				ld= l;
+//				break;
+//			}
+//		}
+//		if(ld!=null) {
+//			post.removeLikeObject(ld);
+//			postJpaRepository.save(post);
+//		}
+//		
+//		return ResponseEntity.ok("Done!");
 		
-		return ResponseEntity.ok("Done!");
+		return postReceiver.unLike(like);
 	}
 	
 }

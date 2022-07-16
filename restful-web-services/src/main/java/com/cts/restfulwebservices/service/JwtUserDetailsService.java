@@ -156,6 +156,9 @@ public class JwtUserDetailsService implements UserDetailsService {
 		newProfile.setPhonenumber(profile.getPhonenumber());
 		newProfile.setEmail(profile.getEmail());
 		newProfile.setAboutme(profile.getAboutme());
+		
+		DAOUser dUser= userRepository.findByUsername(profile.getUsername()).get(0);
+		newProfile.setUser(dUser);
 
 		return profileRepository.save(newProfile);
 
