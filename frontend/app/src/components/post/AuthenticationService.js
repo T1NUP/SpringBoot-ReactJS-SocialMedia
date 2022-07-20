@@ -12,6 +12,7 @@ class AuthenticationService {
 
     executeJwtAuthenticationService(username, password) {
         return axios.post(`${API_URL}/authenticate`, {
+            // return axios.post(`http://localhost:8083/jpa/authenticate`, {
             username,
             password
         })

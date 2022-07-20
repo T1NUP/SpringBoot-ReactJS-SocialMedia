@@ -25,6 +25,7 @@ class AccountProfileService {
 
     updateDetails(username, firstname, lastname, email, studentnumber, phonenumber, aboutme) {
         return axios.post(`${API_URL}/updateProfile`, {
+            // return axios.post(`http://localhost:8083/updateProfile`, {
             username,
             firstname,
             lastname,
@@ -56,6 +57,7 @@ class AccountProfileService {
     checkDuplicatePhonenumber(phonenumber) {
         if (phonenumber != null) {
             return axios.get(`${JPA_API_URL}/checkuser/phonenumber/${phonenumber}`);
+            // return axios.get(`http://localhost:8083/checkuser/phonenumber/${phonenumber}`);
         }
     }
 

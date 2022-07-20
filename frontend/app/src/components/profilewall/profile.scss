@@ -23,7 +23,7 @@
   font-weight: 400;
   line-height: 1.5;
   color: #888da8;
-  background-color: #edf2f6;
+  background-color: #edf5f6;
   height: 100vh;
 
   @include media("<=1428px") {
@@ -71,7 +71,7 @@ html {
 .container {
   position: relative;
   width: 100%;
-  background-color: #7c6c68;
+  background-color: #8eadea;
 }
 
 //.col {
@@ -80,7 +80,7 @@ html {
 //}
 
 .ui-block {
-  background-color: #474a53;
+  background-color: #212631;
   border-radius: 5px;
   border: 1px solid #e6ecf5;
   margin-bottom: 15px;
@@ -196,7 +196,7 @@ li {
   border-bottom-color: rgb(230, 236, 245);
   border-bottom-style: solid;
   border-bottom-width: 1px;
-  border-top-color: rgb(136, 146, 168);
+  border-top-color: rgb(0, 0, 0);
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
   border-top-style: none;
@@ -213,10 +213,10 @@ li {
 }
 
 .ui-content {
-  border-bottom-color: rgb(230, 236, 245);
+  border-bottom-color: #060708;
   border-bottom-style: solid;
   border-bottom-width: 1px;
-  border-top-color: rgb(136, 146, 168);
+  border-top-color: rgb(7, 8, 9);
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
   border-top-style: none;

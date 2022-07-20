@@ -10,7 +10,7 @@ export class Register extends React.Component {
     this.state = {
       firstname: this.props.firstname,
       lastname: this.props.lastname,
-      studentnumber: this.props.studentnumber,
+      //studentnumber: this.props.studentnumber,
       email: this.props.email,
       phonenumber: this.props.phonenumber,
       aboutme: this.props.aboutme,
@@ -42,7 +42,7 @@ export class Register extends React.Component {
     }
   }
 
-  checkDuplicateStudentnumber(studentnumber) {
+ /* checkDuplicateStudentnumber(studentnumber) {
 
     if (studentnumber != null) {
       AccountProfileService.checkDuplicateStudentnumber(studentnumber)
@@ -61,7 +61,7 @@ export class Register extends React.Component {
 
         })
     }
-  }
+  }*/
 
   checkDuplicateEmail(email) {
     if (email != null) {
@@ -106,14 +106,14 @@ export class Register extends React.Component {
 
     const usernameRegex = /^[a-zA-Z0-9._-]*$/
     const nameCheck = /^[a-zA-Z\s]*$/
-    const phoneCheck = /^\(?(?:\+?61|0)(?:(?:2\)?[ -]?(?:3[ -]?[38]|[46-9][ -]?[0-9]|5[ -]?[0-35-9])|3\)?(?:4[ -]?[0-57-9]|[57-9][ -]?[0-9]|6[ -]?[1-67])|7\)?[ -]?(?:[2-4][ -]?[0-9]|5[ -]?[2-7]|7[ -]?6)|8\)?[ -]?(?:5[ -]?[1-4]|6[ -]?[0-8]|[7-9][ -]?[0-9]))(?:[ -]?[0-9]){6}|4\)?[ -]?(?:(?:[01][ -]?[0-9]|2[ -]?[0-57-9]|3[ -]?[1-9]|4[ -]?[7-9]|5[ -]?[018])[ -]?[0-9]|3[ -]?0[ -]?[0-5])(?:[ -]?[0-9]){5})$/
+    // const phoneCheck = /^\(?(?:\+?61|0)(?:(?:2\)?[ -]?(?:3[ -]?[38]|[46-9][ -]?[0-9]|5[ -]?[0-35-9])|3\)?(?:4[ -]?[0-57-9]|[57-9][ -]?[0-9]|6[ -]?[1-67])|7\)?[ -]?(?:[2-4][ -]?[0-9]|5[ -]?[2-7]|7[ -]?6)|8\)?[ -]?(?:5[ -]?[1-4]|6[ -]?[0-8]|[7-9][ -]?[0-9]))(?:[ -]?[0-9]){6}|4\)?[ -]?(?:(?:[01][ -]?[0-9]|2[ -]?[0-57-9]|3[ -]?[1-9]|4[ -]?[7-9]|5[ -]?[018])[ -]?[0-9]|3[ -]?0[ -]?[0-5])(?:[ -]?[0-9]){5})$/
     const emailCheck = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/
-    const studentnumberCheck = /^s[0-9]{7}$/
+    //const studentnumberCheck = /^s[0-9]{7}$/
     const passwordCheck = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/
 
     this.checkDuplicateUser(values.username);
     this.checkDuplicateEmail(values.email);
-    this.checkDuplicateStudentnumber(values.studentnumber);
+    // this.checkDuplicateStudentnumber(values.studentnumber);
     this.checkDuplicatePhonenumber(values.phonenumber);
 
     if (values.username == null) {
@@ -150,9 +150,11 @@ export class Register extends React.Component {
 
     if (values.phonenumber == null) {
       errors.phonenumber = 'Enter your phone number'
-    } else if (!phoneCheck.test(values.phonenumber)) {
-      errors.phonenumber = 'Please enter a valid phone number'
-    } else if (this.state.isPhonenumberDuplicate === true) {
+    } 
+    // else if (!phoneCheck.test(values.phonenumber)) {
+    //   errors.phonenumber = 'Please enter a valid phone number'
+    // } 
+    else if (this.state.isPhonenumberDuplicate === true) {
       errors.phonenumber = 'This phone number is already in use'
     }
 
@@ -164,13 +166,13 @@ export class Register extends React.Component {
       errors.email = 'This email is already in use'
     }
 
-    if (values.studentnumber == null) {
+   /* if (values.studentnumber == null) {
       errors.studentnumber = 'Enter your student number'
     } else if (!studentnumberCheck.test(values.studentnumber)) {
       errors.studentnumber = 'Please enter a valid student number (includes the s)'
     } else if (this.state.isStudentnumberDuplicate == true) {
       errors.studentnumber = 'This student number is already in use'
-    }
+    } */
 
     return errors
 
@@ -210,14 +212,7 @@ export class Register extends React.Component {
                         </fieldset>
                       </div>
                   </div>
-                  <fieldset className="form-group">
-                    <label htmlFor="studentnumber">Student Number</label>
-                    <OverlayTrigger placement={"bottom"} overlay={<Tooltip id={"tooltip-bottom"}>Please include 's'</Tooltip>}>
-                      <Field className="field" type="text" name="studentnumber" />
-                    </OverlayTrigger>
-                    <ErrorMessage name="studentnumber" component="div"
-                                  className="checkError" />
-                  </fieldset>
+                 
 
                   <fieldset className="form-group">
                     <label htmlFor="email">Email</label>
@@ -277,3 +272,4 @@ export class Register extends React.Component {
     );
   }
 }
+

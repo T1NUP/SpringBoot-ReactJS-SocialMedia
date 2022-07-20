@@ -136,14 +136,9 @@ class LoginComponent extends Component {
       <div className="App">
         <div className="LoginComponent">
           <div className="Description">
-            <h1>RMIT<br/>StalkerSpace</h1>
+            <h1><b>Friend Book</b></h1>
             <p>
-              A fully-responsive, mobile friendly social media built with <b>ReactJS</b>,
-              <b> Springboot</b>, <b>Maven</b>, <b>MySQL</b>. Fully integrated with <b>Google Cloud, </b>
-              <b>Travis CI & CD</b><br/><br/>
-              <span>Check the project out on our&nbsp;
-              <a href={"https://github.com/RMIT-SEPT/Tom-Yum"} target={"_blank"}
-                 style={{color: "white", fontWeight: "bold"}}>Github</a>.</span>
+             Connecting friends.........
 
             </p>
           </div>
